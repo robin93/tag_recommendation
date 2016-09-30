@@ -255,30 +255,28 @@ import numpy as np
 
 # print(ldamodel.print_topics(num_topics=100, num_words=100))
 """prediction on unseen questions"""
-import json
-with open('test_questions.json') as data_file:
-	question_list = json.load(data_file)
+# import json
+# with open('test_questions.json') as data_file:
+# 	question_list = json.load(data_file)
 
-model_to_predict = gensim.models.ldamodel.LdaModel.load("10Passes_40000trainquestions")
-print model_to_predict.print_topics(num_topics=100,num_words=100)
+# model_to_predict = gensim.models.ldamodel.LdaModel.load("10Passes_40000trainquestions")
+# print model_to_predict.print_topics(num_topics=100,num_words=100)
 
-doc_to_predict = [doc.split() for doc in question_list]
-dictionary = corpora.Dictionary(doc_to_predict)
-doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_to_predict]
-topics = model_to_predict[doc_term_matrix]
-
-
-output_file = open('test_questions_topic_distribution.csv','w')
-loop = 0
-for i in topics:
-	empty_list = [0]*100
-	loop += 1
-	print loop
-	for prob_values in i:
-		empty_list[prob_values[0]] = prob_values[1]
-	# if loop > 3:
-	# 	break
-	to_write = str(empty_list).replace("[","").replace("]","")
-	output_file.writelines(to_write+"\n")
+# doc_to_predict = [doc.split() for doc in question_list]
+# dictionary = corpora.Dictionary(doc_to_predict)
+# doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_to_predict]
+# topics = model_to_predict[doc_term_matrix]
 
 
+# output_file = open('test_questions_topic_distribution.csv','w')
+# loop = 0
+# for i in topics:
+# 	empty_list = [0]*100
+# 	loop += 1
+# 	print loop
+# 	for prob_values in i:
+# 		empty_list[prob_values[0]] = prob_values[1]
+# 	# if loop > 3:
+# 	# 	break
+# 	to_write = str(empty_list).replace("[","").replace("]","")
+# 	output_file.writelines(to_write+"\n")
