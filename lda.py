@@ -218,6 +218,85 @@ import json
 # 	output_file.writelines(to_write)
 
 
+"""train and test Data Division - 10 cross validation"""
+# import json
+# with open('./files/questions_with_only_frequent_words.json') as data_file:
+# 	question_list = json.load(data_file)
+
+# #Generate the random number list
+# import random
+# random.seed(100)
+# train_indices = random.sample(range(1,50000),45000)
+
+
+
+# train_list = [] 
+# test_list = []
+# loop = 0
+# for question in question_list:
+# 	loop += 1
+# 	if loop in train_indices:
+# 		print loop,"train"
+# 		train_list.append(question)
+# 	else:
+# 		print loop,"test"
+# 		test_list.append(question)
+
+# print "number of questions in train list",len(train_list)
+# print "number of question in the test list",len(test_list)
+
+# with open('./files/10KcrossVal_data/train_questions_45000_rand.json','w') as outfile:
+# 	json.dump(train_list,outfile)
+# with open('./files/10KcrossVal_data/test_questions_5000_rand.json','w') as outfile:
+# 	json.dump(test_list,outfile)
+
+# with open('./files/tags_list_list_with_frequentTags.json') as data_file:
+# 	tag_list_list = json.load(data_file)
+
+# train_list = []
+# test_list = []
+# loop = 0
+# for tag_list in tag_list_list:
+# 	loop += 1
+# 	if loop in train_indices:
+# 		print loop,"train"
+# 		train_list.append(tag_list)
+# 	else:
+# 		print loop,"test"
+# 		test_list.append(tag_list)
+# print "number of tag list in train",len(train_list)
+# print "number of tag list in test",len(test_list)
+
+# output_file = open('./files/train_tag_list.csv',"w")
+# loop = 0
+# for tag_list in train_list:
+# 	loop += 1
+# 	print loop
+# 	to_write = ""
+# 	for tag in tag_list:
+# 		to_write = to_write + tag.encode("ascii") +","
+# 	length = len(to_write)
+# 	to_write = to_write[:length-1] + "\n"
+# 	# if loop > 3:
+# 	# 	break
+# 	# to_write = str(tag_list).replace("[","").replace("]","") + "\n"
+# 	output_file.writelines(to_write)
+
+# output_file = open('./files/test_tag_list.csv',"w")
+# loop = 0
+# for tag_list in test_list:
+# 	loop += 1
+# 	print loop
+# 	to_write = ""
+# 	for tag in tag_list:
+# 		to_write = to_write + tag.encode("ascii") +","
+# 	length = len(to_write)
+# 	to_write = to_write[:length-1] + "\n"
+# 	# if loop > 3:
+# 	# 	break
+# 	# to_write = str(tag_list).replace("[","").replace("]","") + "\n"
+# 	output_file.writelines(to_write)
+
 
 
 
@@ -225,35 +304,41 @@ import json
 
 
 """apply lda model"""
-# # Importing Gensim
+# Importing Gensim
 import gensim
 from gensim import corpora
 import numpy as np
 
-# # Creating the term dictionary of our courpus, where every unique term is assigned an index. 
-# # dictionary = corpora.Dictionary(doc_clean)
+# Creating the term dictionary of our courpus, where every unique term is assigned an index. 
+# dictionary = corpora.Dictionary(doc_clean)
 
-# # Converting list of documents (corpus) into Document Term Matrix using dictionary prepared above.
+# Converting list of documents (corpus) into Document Term Matrix using dictionary prepared above.
 # import json
-# with open('train_questions.json') as data_file:
+# with open('./files/10KcrossVal_data/train_questions_45000_rand.json') as data_file:
 # 	question_list = json.load(data_file)
 
-# print len(question_list)
-# doc_clean = [doc.split() for doc in question_list]
-# dictionary = corpora.Dictionary(doc_clean)
-# doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
-# print np.shape(doc_term_matrix)
+import json
+with open('./files/10KcrossVal_data/test_questions_5000_rand.json') as data_file:
+	question_list = json.load(data_file)
+
+print len(question_list)
+doc_clean = [doc.split() for doc in question_list]
+dictionary = corpora.Dictionary(doc_clean)
+doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
+print np.shape(doc_term_matrix)
 
 
 
-# # Creating the object for LDA model using gensim library
-# Lda = gensim.models.ldamodel.LdaModel
+# Creating the object for LDA model using gensim library
+Lda = gensim.models.ldamodel.LdaModel
 
-# # # Running and Trainign LDA model on the document term matrix.
-# ldamodel = Lda(doc_term_matrix, num_topics=100, id2word = dictionary, passes=1,random_state= 10)
+# # Running and Trainign LDA model on the document term matrix.
+ldamodel = Lda(doc_term_matrix, num_topics=100, id2word = dictionary, passes=1,random_state= 10)
+print(ldamodel.log_perplexity(doc_term_matrix))
 # ldamodel.save("10Passes_40000trainquestions")
 
 # print(ldamodel.print_topics(num_topics=100, num_words=100))
+
 """prediction on unseen questions"""
 # import json
 # with open('test_questions.json') as data_file:
@@ -280,3 +365,5 @@ import numpy as np
 # 	# 	break
 # 	to_write = str(empty_list).replace("[","").replace("]","")
 # 	output_file.writelines(to_write+"\n")
+
+

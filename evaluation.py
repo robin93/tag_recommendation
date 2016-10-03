@@ -8,7 +8,7 @@
 # 			tag_duple_str = line.split(",")[1]
 # 			index_tag_dict[loop] = (tag_duple_str).strip()[1:-1]
 
-# print index_tag_dict[23]
+# print index_tag_dict[0]
 
 
 # list_of_recommended_tags = []
