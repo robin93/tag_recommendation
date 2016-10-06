@@ -38,7 +38,7 @@ import json
 #     json.dump(tag_list_list, outfile)
 
 """stop words removal, stemming,punctuation removed,numerics removed"""
-# with open('uncleaned_question_list.json') as data_file:    
+# with open('./files/uncleaned_question_list.json') as data_file:    
 #     question_list = json.load(data_file)
 
 # loop = 0
@@ -58,15 +58,17 @@ import json
 
 # import string
 # stop = set(stopwords.words('english'))
+# print len(stop)
 # exclude = set(string.punctuation) 
 # # lemma = WordNetLemmatizer()
 # port = PorterStemmer()
 # def clean(doc):
-#     stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
-#     numeric_free = " ".join([(re.sub('[0-9]+','',i)) for i in stop_free.split()])
-#     # punc_free = ''.join(ch for ch in numeric_free if ch not in exclude)
-#     stemmed = " ".join(port.stem(word) for word in numeric_free.split())
-#     return stemmed
+# 	stop_free1 = " ".join([i for i in doc.lower().split() if i not in stop])
+# 	numeric_free = " ".join([(re.sub('[0-9]+','',i)) for i in stop_free1.split()])
+# 	punc_free = "".join(ch for ch in numeric_free if ch not in exclude)
+# 	stemmed = " ".join([port.stem(word) for word in punc_free.split()])
+# 	stop_free = " ".join([i for i in stemmed.split() if i not in stop])
+# 	return stop_free
 
 # # doc_clean = [clean(doc).split() for doc in small_list]
 # doc_clean = [clean(doc) for doc in small_list]
@@ -74,12 +76,12 @@ import json
 # print len(doc_clean)
 
 # print "dumping to json"
-# with open('cleaned_question_list.json', 'w') as outfile:
+# with open('./files/cleaned_question_list_punct_remove.json', 'w') as outfile:
 #     json.dump(doc_clean, outfile)
 
-"""word frequency analysis"""
+# """word frequency analysis"""
 # import json
-# with open('cleaned_question_list.json') as data_file:
+# with open('./files/cleaned_question_list_punct_remove.json') as data_file:
 # 	question_list = json.load(data_file)
 
 # word_list = []
@@ -106,39 +108,32 @@ import json
 # 	print loop
 # 	question_list_wordscountGreaterthan20.append(modified_question)
 
-# print len(question_list_wordscountGreaterthan20)
+# print "number of questions with frequent words",len(question_list_wordscountGreaterthan20)
 
 # # with open('word_count_greaterThan20_dict.json','w') as outfile:
 # # 	json.dump(count_greaterThan20,outfile)
 
-# with open('questions_with_only_frequent_words.json','w') as outfile:
+# with open('./files/questions_with_only_frequent_words_punch_removed.json','w') as outfile:
 # 	json.dump(question_list_wordscountGreaterthan20,outfile)
+
 
 """retaining frequent tags"""
 # import json
-# with open('tag_list_list.json') as data_file:
+# with open('./files/tag_list_list.json') as data_file:
 # 	tag_list_list = json.load(data_file)
-
 # print "total number of bookmarks",len(tag_list_list) 
-
 # list_of_tags = []
 # for tag_list in tag_list_list:
 # 	for tag in tag_list:
 # 		list_of_tags.append(tag)
-
-
 # print "total number of tags", len(list_of_tags)
-
 # from collections import Counter
 # counts = Counter(list_of_tags)
-
 # tags_to_retain = []
 # for tags in counts.keys():
 # 	if counts[tags] > 50:
 # 		tags_to_retain.append(tags)
-
 # print "list of tags to retain",len(tags_to_retain)
-
 # tags_list_list_with_frequentTags = []
 # loop = 0
 # for tag_list in tag_list_list:
@@ -147,9 +142,6 @@ import json
 # 		print loop
 # 	new_list = [i for i in tag_list if i in tags_to_retain]
 # 	tags_list_list_with_frequentTags.append(new_list)
-
-
-
 # print "total number of new bookmarks after cleaning",len(tags_list_list_with_frequentTags)
 
 # print "dumping to json now"
@@ -158,7 +150,7 @@ import json
 
 """train and test Data Division"""
 # import json
-# with open('questions_with_only_frequent_words.json') as data_file:
+# with open('questions_with_only_frequent_words_punch_removed.json') as data_file:
 # 	question_list = json.load(data_file)
 
 # train_list = [] 
@@ -172,18 +164,14 @@ import json
 # 	else:
 # 		print loop,"test"
 # 		test_list.append(question)
-
 # print "number of questions in train list",len(train_list)
 # print "number of question in the test list",len(test_list)
-
 # with open('train_questions.json','w') as outfile:
 # 	json.dump(train_list,outfile)
 # with open('test_questions.json','w') as outfile:
 # 	json.dump(test_list,outfile)
-
 # with open('tags_list_list_with_frequentTags.json') as data_file:
 # 	tag_list_list = json.load(data_file)
-
 # train_list = []
 # test_list = []
 # loop = 0
@@ -220,10 +208,10 @@ import json
 
 """train and test Data Division - 10 cross validation"""
 # import json
-# with open('./files/questions_with_only_frequent_words.json') as data_file:
+# with open('./files/questions_with_only_frequent_words_punch_removed.json') as data_file:
 # 	question_list = json.load(data_file)
 
-# #Generate the random number list
+#Generate the random number list
 # import random
 # random.seed(100)
 # train_indices = random.sample(range(1,50000),45000)
@@ -304,66 +292,76 @@ import json
 
 
 """apply lda model"""
-# Importing Gensim
-import gensim
-from gensim import corpora
-import numpy as np
+# # Importing Gensim
+# import gensim
+# from gensim import corpora
+# import numpy as np
 
-# Creating the term dictionary of our courpus, where every unique term is assigned an index. 
-# dictionary = corpora.Dictionary(doc_clean)
+# # Creating the term dictionary of our courpus, where every unique term is assigned an index. 
+# # dictionary = corpora.Dictionary(doc_clean)
 
-# Converting list of documents (corpus) into Document Term Matrix using dictionary prepared above.
+# # Converting list of documents (corpus) into Document Term Matrix using dictionary prepared above.
 # import json
 # with open('./files/10KcrossVal_data/train_questions_45000_rand.json') as data_file:
 # 	question_list = json.load(data_file)
 
-import json
-with open('./files/10KcrossVal_data/test_questions_5000_rand.json') as data_file:
-	question_list = json.load(data_file)
-
-print len(question_list)
-doc_clean = [doc.split() for doc in question_list]
-dictionary = corpora.Dictionary(doc_clean)
-doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
-print np.shape(doc_term_matrix)
 
 
+# print len(question_list)
+# doc_clean = [doc.split() for doc in question_list]
+# dictionary = corpora.Dictionary(doc_clean)
+# doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
+# print np.shape(doc_term_matrix)
 
-# Creating the object for LDA model using gensim library
-Lda = gensim.models.ldamodel.LdaModel
+# #creating the heldout set for perplexity estimation
+# with open('./files/10KcrossVal_data/test_questions_5000_rand.json') as data_file:
+# 	question_list2 = json.load(data_file)
+# doc_clean2 = [doc.split() for doc in question_list2]
+# print "creating dictionary"
+# dictionary2 = corpora.Dictionary(doc_clean2)
+# print "creating document term matrix"
+# doc_term_matrix2 = [dictionary2.doc2bow(doc) for doc in doc_clean2]
 
-# # Running and Trainign LDA model on the document term matrix.
-ldamodel = Lda(doc_term_matrix, num_topics=100, id2word = dictionary, passes=1,random_state= 10)
-print(ldamodel.log_perplexity(doc_term_matrix))
-# ldamodel.save("10Passes_40000trainquestions")
+
+# # Creating the object for LDA model using gensim library
+# Lda = gensim.models.ldamodel.LdaModel
+
+# # # Running and Trainign LDA model on the document term matrix.
+# print "training the lda model"
+# ldamodel = Lda(doc_term_matrix, num_topics=70, id2word = dictionary, passes=30,random_state= 10)
+# print "perplexity",(ldamodel.log_perplexity(doc_term_matrix2))
+# ldamodel.save("./files/10KcrossVal_data/30Passes_42000trainquestions_rand_70topics")
 
 # print(ldamodel.print_topics(num_topics=100, num_words=100))
 
 """prediction on unseen questions"""
-# import json
-# with open('test_questions.json') as data_file:
-# 	question_list = json.load(data_file)
 
-# model_to_predict = gensim.models.ldamodel.LdaModel.load("10Passes_40000trainquestions")
-# print model_to_predict.print_topics(num_topics=100,num_words=100)
+import gensim
+from gensim import corpora
+import numpy as np
+import json
+with open('./files/10KcrossVal_data/test_questions_5000_rand.json') as data_file:
+	question_list = json.load(data_file)
 
-# doc_to_predict = [doc.split() for doc in question_list]
-# dictionary = corpora.Dictionary(doc_to_predict)
-# doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_to_predict]
-# topics = model_to_predict[doc_term_matrix]
+model_to_predict = gensim.models.ldamodel.LdaModel.load("./files/10KcrossVal_data/30Passes_42000trainquestions_rand_50topics")
+print model_to_predict.print_topics(num_topics=50,num_words=100)
 
+doc_to_predict = [doc.split() for doc in question_list]
+dictionary = corpora.Dictionary(doc_to_predict)
+doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_to_predict]
+topics = model_to_predict[doc_term_matrix]
+output_file = open('./files/10KcrossVal_data/test_questions50topics30passes_topic_distribution.csv','w')
+loop = 0
 
-# output_file = open('test_questions_topic_distribution.csv','w')
-# loop = 0
-# for i in topics:
-# 	empty_list = [0]*100
-# 	loop += 1
-# 	print loop
-# 	for prob_values in i:
-# 		empty_list[prob_values[0]] = prob_values[1]
-# 	# if loop > 3:
-# 	# 	break
-# 	to_write = str(empty_list).replace("[","").replace("]","")
-# 	output_file.writelines(to_write+"\n")
+for i in topics:
+	empty_list = [0]*50
+	loop += 1
+	print loop
+	for prob_values in i:
+		empty_list[prob_values[0]] = prob_values[1]
+	# if loop > 3:
+	# 	break
+	to_write = str(empty_list).replace("[","").replace("]","")
+	output_file.writelines(to_write+"\n")
 
 
