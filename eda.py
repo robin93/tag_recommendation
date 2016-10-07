@@ -14,12 +14,13 @@ output_file.writelines(("identity"+","+"user"+","+"number_of_tags"+"\n"))
 loop = 0
 for resource in objects[0]:
 	loop += 1
-	print loop
-	# if loop > 10:
-		# break
-	question = resource['body']
-	tags = resource['tags']
-	user = resource['ownerUserId']
-	identity = resource['Id']
-	to_write = identity+","+user+","+str(len(tags))+"\n"
-	output_file.writelines(to_write)
+	# print loop
+	if loop > 1:
+		break
+	# question = resource['body']
+	# tags = resource['tags']
+	# user = resource['ownerUserId']
+	# identity = resource['Id']
+	# to_write = identity+","+user+","+str(len(tags))+"\n"
+	# output_file.writelines(to_write)
+	print resource
